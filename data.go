@@ -66,8 +66,8 @@ func (c *Config) WriteFile() error {
 	return nil
 }
 
-// DecryptFileAndWriteFile ... Encrypt data and Write file
-func (d *Data) DecryptFileAndWriteFile(pstoreKey string) error {
+// DecryptFileAndWriteFileWithAddData ... Encrypt data and Write file.
+func (d *Data) DecryptFileAndWriteFileWithAddData(pstoreKey string) error {
 	config := &Config{}
 
 	if IsFileNotEmpty(FilePath) {
@@ -101,6 +101,37 @@ func (d *Data) DecryptFileAndWriteFile(pstoreKey string) error {
 
 	return nil
 }
+
+// DecryptFileAndWriteFileWithDeleteData ... Encrypt data and Write file.
+func (d *Data) DecryptFileAndWriteFileWithDeleteData(pstoreKey, deleteName string) error {
+	config := &Config{}
+
+	if IsFileNotEmpty(FilePath) {
+		c := &Config{}
+		if err := c.Load(pstoreKey); err != nil {
+			return err
+		}
+
+		var data []*Data
+		for _, v := range c.FileData {
+			if v.Name == d.Name {
+				continue
+			}
+			data = append(data, v)
+		}
+
+		config = &Config{data}
+	} else {
+		config = &Config{[]*Data{d}}
+	}
+
+	if err := config.WriteFile(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 
 // EncryptFile ... Encrypt file
 func EncryptFile(pstoreKey string) error {
