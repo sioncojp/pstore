@@ -7,6 +7,8 @@ import (
 	"github.com/urfave/cli"
 )
 
+const AppVersion = "1.0.0"
+
 // AwsProfile ... local aws profile. ~/.aws/config
 var AwsProfile string
 

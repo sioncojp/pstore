@@ -13,6 +13,7 @@ func FlagSet() *cli.App {
 	app := cli.NewApp()
 	app.Name = "pstore"
 	app.Usage = "pstore"
+	app.Version = AppVersion
 
 	// set subcommand
 	app.Commands = NewCommand()
