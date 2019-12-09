@@ -114,7 +114,7 @@ func (d *Data) DecryptFileAndWriteFileWithDeleteData(pstoreKey, deleteName strin
 
 		var data []*Data
 		for _, v := range c.FileData {
-			if v.Name == d.Name {
+			if v.Name == deleteName {
 				continue
 			}
 			data = append(data, v)
@@ -131,7 +131,6 @@ func (d *Data) DecryptFileAndWriteFileWithDeleteData(pstoreKey, deleteName strin
 
 	return nil
 }
-
 
 // EncryptFile ... Encrypt file
 func EncryptFile(pstoreKey string) error {
