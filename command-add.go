@@ -46,7 +46,7 @@ func CommandAdd(c *cli.Context) error {
 	}
 
 	// encrypt data to yml
-	if err := d.DecryptFileAndWriteFile(pstoreKey); err != nil {
+	if err := d.DecryptFileAndWriteFileWithAddData(pstoreKey); err != nil {
 		return err
 	}
 	if err := EncryptFile(pstoreKey); err != nil {

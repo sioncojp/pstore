@@ -10,6 +10,7 @@ import (
 // CommandDelete ... Delete SSM and file data
 func CommandDelete(c *cli.Context) error {
 	NewVariable(c)
+	d := &Data{}
 
 	client, err := NewSsmClient()
 	if err != nil {
@@ -28,15 +29,30 @@ func CommandDelete(c *cli.Context) error {
 		return err
 	}
 
-	d := &DeleteData{}
-	if err := d.DeletePrompt(config); err != nil {
+	deleteData := &DeleteData{}
+	if err := deleteData.DeletePrompt(config); err != nil {
 		return err
 	}
 
 	// delete parameter
-	if _, err := client.DeleteParameter(d.Name); err != nil {
+	var isNotExistParameterStore bool
+	if _, err := client.DeleteParameter(deleteData.Name); err != nil {
+		isNotExistParameterStore = true
+	}
+	if isNotExistParameterStore {
+		if err := deleteData.ForceDeletePrompt(config); err != nil {
+			return err
+		}
+	}
+
+	// encrypt data to yml
+	if err := d.DecryptFileAndWriteFileWithDeleteData(pstoreKey, deleteData.Name); err != nil {
 		return err
 	}
+	if err := EncryptFile(pstoreKey); err != nil {
+		return err
+	}
+
 
 	fmt.Println()
 	fmt.Println("finished!!")

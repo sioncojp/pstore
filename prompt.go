@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"gopkg.in/AlecAivazis/survey.v1"
 )
@@ -51,7 +52,7 @@ func (d *Data) AddPrompt(kmsAliasList []string) error {
 
 	if !confirm {
 		fmt.Println("cancel")
-		return nil
+		os.Exit(0)
 	}
 
 	return nil
@@ -88,7 +89,25 @@ func (r *DeleteData) DeletePrompt(c *Config) error {
 
 	if !confirm {
 		fmt.Println("cancel")
-		return nil
+		os.Exit(0)
+	}
+
+	return nil
+}
+
+// ForceDeletePrompt ... prompt for force delete logic.
+// force delete : Can it be deleted from the file because it does not exist in the parameter store?
+func (r *DeleteData) ForceDeletePrompt(c *Config) error {
+	fmt.Println()
+	confirm := false
+	prompt := &survey.Confirm{Message: "Does not exist in the ParameterStore. Are you sure delete from file?:"}
+	if err := survey.AskOne(prompt, &confirm, nil); err != nil {
+		return err
+	}
+
+	if !confirm {
+		fmt.Println("cancel")
+		os.Exit(0)
 	}
 
 	return nil
