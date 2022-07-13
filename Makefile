@@ -16,7 +16,7 @@ dist: build-docker ## create .tar.gz linux & darwin to /bin
 	cd bin && tar zcvf $(linux_name).tar.gz $(linux_name) && rm -f $(linux_name)
 	cd bin && tar zcvf $(darwin_name).tar.gz $(darwin_name) && rm -f $(darwin_name)
 
-build-cross: ## create to build for linux & darwin to bin/
+build-cross: clean ## create to build for linux & darwin to bin/
 	GOOS=linux GOARCH=amd64 go build -o bin/$(linux_name) $(LDFLAGS) *.go
 	GOOS=darwin GOARCH=amd64 go build -o bin/$(darwin_name) $(LDFLAGS) *.go
 
