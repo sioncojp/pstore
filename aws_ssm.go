@@ -51,10 +51,14 @@ func (s *SsmClient) PutParameter(name, value, ssmtype, kmsAlias, description str
 		Name:        aws.String(name),
 		Value:       aws.String(value),
 		Type:        aws.String(ssmtype),
-		KeyId:       aws.String(kmsAlias),
 		Description: aws.String(description),
 		Overwrite:   aws.Bool(true),
 	}
+
+	if ssmtype == "SecureString" {
+		param.KeyId = aws.String(kmsAlias)
+	}
+
 	result, err := s.Session.PutParameter(param)
 	if err != nil {
 		return nil, fmt.Errorf("failed ssm put param: %+v", err)
